@@ -1,10 +1,4 @@
-## Tracking
-vid
->6.00 8.11.25
->8.00 9.11.25
->9.00 10.11.25
+--components folder contains all re usable things to be used in pages later.
 
 
-
- 
-
+react router and react icon libraries used 

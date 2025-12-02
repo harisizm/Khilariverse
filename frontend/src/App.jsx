@@ -1,10 +1,21 @@
-import React from 'react'
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import UserLayout from './components/Layout/UserLayout';
 
 const App = () => {
   return (
-    <div>
-      
-    </div>
+
+    // this enables the client side routing
+    
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<UserLayout/>}>
+        {/* User Layout */}
+      </Route>
+      <Route>
+        {/*Admin Layout*/}
+      </Route>
+    </Routes>
+    </BrowserRouter>
   )
 }
 
