@@ -1,0 +1,37 @@
+{
+  "name": "khilariverse",
+  "version": "1.0.0",
+  "description": "An E-commerce Store in MERN for Software Design and Architecture Semester Project.",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "nodemon backend/server.js",
+    "start": "node backend/server.js"
+    
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harisizm/Khilariverse.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/harisizm/Khilariverse/issues"
+  },
+  "homepage": "https://github.com/harisizm/Khilariverse#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.8.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "ioredis": "^5.8.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1",
+    "stripe": "^20.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
