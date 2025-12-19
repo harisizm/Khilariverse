@@ -30,9 +30,13 @@ const placeOrder = async (req, res) => {
         await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
         // Send Confirmation Email
+        // Use the email from the shipping address if available, otherwise fallback to account email
         const user = await userModel.findById(userId);
-        if (user) {
-            await sendOrderConfirmation(newOrder, user.email, user.name);
+        const emailToSend = address.email || (user ? user.email : null);
+        const nameToSend = address.firstName || (user ? user.name : 'Customer');
+
+        if (emailToSend) {
+            await sendOrderConfirmation(newOrder, emailToSend, nameToSend);
         }
 
         res.json({ success: true, message: "Order Placed" });
