@@ -35,8 +35,12 @@ const placeOrder = async (req, res) => {
         const emailToSend = address.email || (user ? user.email : null);
         const nameToSend = address.firstName || (user ? user.name : 'Customer');
 
+        console.log("Triggering Order Confirmation for:", emailToSend); // DEBUG LOG
+
         if (emailToSend) {
             await sendOrderConfirmation(newOrder, emailToSend, nameToSend);
+        } else {
+            console.warn("No email found for order:", newOrder._id);
         }
 
         res.json({ success: true, message: "Order Placed" });
