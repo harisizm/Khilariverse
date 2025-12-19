@@ -220,4 +220,43 @@ const sendWelcomeEmail = async (userEmail, userName) => {
     }
 };
 
-export { sendOrderConfirmation, sendWelcomeEmail };
+const sendContactEmail = async (data) => {
+    try {
+        console.log(`[Email Service] Sending Contact Email from: ${data.email}`);
+
+        const mailOptions = {
+            from: `"Khilariverse Support" <${process.env.EMAIL_USER}>`,
+            to: process.env.EMAIL_USER, // Send to admin
+            replyTo: data.email, // Allow replying to the user
+            subject: `[Support Request] ${data.subject || 'New Message'} - ${data.name}`,
+            html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                <h2 style="color: #ff003c;">New Support Message</h2>
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; border-left: 4px solid #ff003c;">
+                    <p><strong>Name:</strong> ${data.name}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Subject:</strong> ${data.subject}</p>
+                    <p><strong>Message:</strong></p>
+                    <p style="white-space: pre-wrap;">${data.message}</p>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-top: 20px;">Sent via Khilariverse Contact Form</p>
+            </div>
+            `
+        };
+
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error("CRITICAL: Email credentials missing in .env");
+            return;
+        }
+
+        await transporter.sendMail(mailOptions);
+        console.log('Contact Email sent successfully');
+        return true;
+
+    } catch (error) {
+        console.error("Error sending contact email:", error);
+        return false;
+    }
+};
+
+export { sendOrderConfirmation, sendWelcomeEmail, sendContactEmail };

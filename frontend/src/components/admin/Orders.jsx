@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { ShopContext } from '../../context/ShopContext';
-import { Package, Truck, Check, X } from 'lucide-react';
+import { Package, Truck, Check, X, Trash2 } from 'lucide-react';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -10,15 +10,10 @@ const Orders = () => {
 
   const fetchAllOrders = async () => {
     const token = localStorage.getItem('token');
-    console.log("Fetching Orders. Token:", token); // DEBUG LOG
-    if (!token) {
-      console.log("No token, skipping fetch");
-      return;
-    }
+    if (!token) return;
 
     try {
       const response = await axios.post(backendUrl + '/api/order/list', {}, { headers: { token } });
-      console.log("Orders API Response:", response.data); // DEBUG LOG
       if (response.data.success) {
         setOrders(response.data.orders.reverse());
       } else {
@@ -44,6 +39,26 @@ const Orders = () => {
     }
   }
 
+  const deleteOrderHandler = async (orderId) => {
+    if (!window.confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(backendUrl + '/api/order/delete', { orderId }, { headers: { token } });
+      if (response.data.success) {
+        toast.success("Order Deleted");
+        fetchAllOrders();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  }
+
   useEffect(() => {
     fetchAllOrders();
   }, []);
@@ -53,7 +68,7 @@ const Orders = () => {
       <h3 className='text-3xl font-display font-bold mb-8 uppercase text-neon-pink'>Order Management</h3>
       <div className='flex flex-col gap-6'>
         {orders.map((order, index) => (
-          <div key={index} className='bg-dark-card border border-white/10 rounded-xl p-6 shadow-glow hover:border-neon-pink/30 transition-all grid grid-cols-1 md:grid-cols-[0.5fr_2fr_1fr_1fr_1fr] gap-4 items-start md:items-center'>
+          <div key={index} className='bg-dark-card border border-white/10 rounded-xl p-6 shadow-glow hover:border-neon-pink/30 transition-all grid grid-cols-1 md:grid-cols-[0.5fr_2fr_1fr_1fr_1fr_auto] gap-4 items-start md:items-center'>
 
             <div className="flex justify-center md:justify-start">
               <Package className="text-neon-pink w-12 h-12" />
@@ -95,6 +110,14 @@ const Orders = () => {
               <option value="Out for delivery">Out for delivery</option>
               <option value="Delivered">Delivered</option>
             </select>
+
+            <button
+              onClick={() => deleteOrderHandler(order._id)}
+              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
+              title="Delete Order"
+            >
+              <Trash2 size={20} />
+            </button>
 
           </div>
         ))}

@@ -1,6 +1,6 @@
 import userModel from "../models/userModel.js";
 import orderModel from "../models/orderModel.js";
-import { sendWelcomeEmail } from "../utils/emailService.js";
+import { sendWelcomeEmail, sendContactEmail } from "../utils/emailService.js";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -141,4 +141,26 @@ const deleteUser = async (req, res) => {
     }
 }
 
-export { loginUser, registerUser, adminLogin, allUsers, deleteUser }
+const contactSupport = async (req, res) => {
+    try {
+        const { name, email, subject, message } = req.body;
+
+        if (!name || !email || !message) {
+            return res.json({ success: false, message: "Please fill in all required fields" });
+        }
+
+        const emailSent = await sendContactEmail({ name, email, subject, message });
+
+        if (emailSent) {
+            res.json({ success: true, message: "Message sent successfully" });
+        } else {
+            res.json({ success: false, message: "Failed to send message" });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+export { loginUser, registerUser, adminLogin, allUsers, deleteUser, contactSupport }

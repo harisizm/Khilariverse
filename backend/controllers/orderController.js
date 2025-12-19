@@ -85,4 +85,16 @@ const updateStatus = async (req, res) => {
     }
 }
 
-export { placeOrder, allOrders, userOrders, updateStatus }
+// Delete Order from Admin Panel
+const deleteOrder = async (req, res) => {
+    try {
+        const { orderId } = req.body;
+        await orderModel.findByIdAndDelete(orderId);
+        res.json({ success: true, message: 'Order Deleted' });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+export { placeOrder, allOrders, userOrders, updateStatus, deleteOrder }

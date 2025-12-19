@@ -1,11 +1,42 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Mail, Phone, MapPin, MessageSquare } from 'lucide-react';
+import { ShopContext } from '../context/ShopContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Support = () => {
+  const { backendUrl } = useContext(ShopContext);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: 'General Inquiry',
+    message: ''
+  });
 
-  const handleSubmit = (e) => {
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setFormData(data => ({ ...data, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Support request simulation: Message sent!");
+    try {
+      const response = await axios.post(backendUrl + '/api/user/contact', formData);
+      if (response.data.success) {
+        toast.success("Message sent successfully!");
+        setFormData({
+          name: '',
+          email: '',
+          subject: 'General Inquiry',
+          message: ''
+        });
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -17,7 +48,7 @@ const Support = () => {
           <h1 className="text-4xl sm:text-5xl font-display font-bold text-white mb-4">
             WE'RE HERE TO <span className="text-neon-pink">HELP</span>
           </h1>
-          <p className="text-gray-400">Need assistance? Our support team is ready/24/7.</p>
+          <p className="text-gray-400">Need assistance? Our support team is ready 24/7.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -28,24 +59,53 @@ const Support = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm text-gray-400 mb-2">Name</label>
-                <input type="text" className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors" placeholder="Your Name" />
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={onChangeHandler}
+                  required
+                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors"
+                  placeholder="Your Name"
+                />
               </div>
               <div>
                 <label className="block text-sm text-gray-400 mb-2">Email</label>
-                <input type="email" className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors" placeholder="your@email.com" />
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={onChangeHandler}
+                  required
+                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors"
+                  placeholder="your@email.com"
+                />
               </div>
               <div>
                 <label className="block text-sm text-gray-400 mb-2">Subject</label>
-                <select className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors">
-                  <option>General Inquiry</option>
-                  <option>Order Support</option>
-                  <option>Technical Issue</option>
-                  <option>Warranty Claim</option>
+                <select
+                  name="subject"
+                  value={formData.subject}
+                  onChange={onChangeHandler}
+                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors"
+                >
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="Order Support">Order Support</option>
+                  <option value="Technical Issue">Technical Issue</option>
+                  <option value="Warranty Claim">Warranty Claim</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm text-gray-400 mb-2">Message</label>
-                <textarea rows="4" className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors" placeholder="How can we help?"></textarea>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={onChangeHandler}
+                  required
+                  rows="4"
+                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-white focus:border-neon-blue focus:outline-none transition-colors"
+                  placeholder="How can we help?"
+                ></textarea>
               </div>
               <button type="submit" className="w-full bg-neon-blue hover:bg-neon-blue/80 text-dark-bg font-bold py-3 rounded transition-colors uppercase tracking-wide">
                 Submit Request
