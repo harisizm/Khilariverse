@@ -14,6 +14,8 @@ import Orders from './components/admin/Orders';
 import MyOrders from './pages/MyOrders';
 import AddProduct from './components/admin/AddProduct';
 import ListProduct from './components/admin/ListProduct';
+import Dashboard from './components/admin/Dashboard';
+import UsersList from './components/admin/Users';
 import Software from './pages/Software';
 import Support from './pages/Support';
 import About from './pages/About';
@@ -45,9 +47,12 @@ function App() {
           <Route path="/orders" element={<MyOrders />} />
           <Route path="/admin/login" element={<AdminLogin />} /> {/* Admin login remains a separate route */}
           <Route path="/admin" element={<Admin />}>
+            <Route index element={<Dashboard />} /> {/* Default to Dashboard */}
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="add" element={<AddProduct />} />
             <Route path="list" element={<ListProduct />} />
             <Route path="orders" element={<Orders />} />
+            <Route path="users" element={<UsersList />} />
           </Route>
           <Route path="/software" element={<Software />} />
           <Route path="/support" element={<Support />} />

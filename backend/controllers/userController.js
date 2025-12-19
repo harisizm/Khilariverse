@@ -21,6 +21,9 @@ const loginUser = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (isMatch) {
+            // Update last login
+            await userModel.findByIdAndUpdate(user._id, { lastLogin: Date.now() });
+            
             const token = createToken(user._id);
             return res.json({ success: true, token, user: { name: user.name, email: user.email, role: user.role } })
         }
@@ -60,7 +63,8 @@ const registerUser = async (req, res) => {
         const newUser = new userModel({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            lastLogin: Date.now()
         })
 
         const user = await newUser.save();
@@ -91,4 +95,27 @@ const adminLogin = async (req, res) => {
     }
 }
 
-export { loginUser, registerUser, adminLogin }
+// Admin: Get all users
+const allUsers = async (req, res) => {
+    try {
+        const users = await userModel.find({});
+        res.json({ success: true, users });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+// Admin: Delete user
+const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.body;
+        await userModel.findByIdAndDelete(id);
+        res.json({ success: true, message: "User Deleted" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+export { loginUser, registerUser, adminLogin, allUsers, deleteUser }
