@@ -115,29 +115,26 @@ export const ShopProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (user && localStorage.getItem('token')) {
-      // Using localStorage token for safety to match API calls
-      setToken(localStorage.getItem('token'));
-      getUserCart(localStorage.getItem('token'));
-    } else {
-      // User logged out: Clear cart completely to ensure no stale data
-      setToken("");
-      setCartItems({});
-      localStorage.removeItem('cartItems');
-    }
-  }, [user]);
+    // Check local storage directly for token to ensure persistence on refresh
+    const localToken = localStorage.getItem('token');
 
-  // Save Cart to localStorage (only if no token, aka Guest)
-  // Actually, keeping local storage sync for guests is good. 
-  // If logged in, we rely on backend, but maybe mirroring to local is fine too? 
-  // Conflict: if we mirror, we might overwrite backend data with stale local data on next load.
-  // Strategy: 
-  // - If Token: Ignore saving to localStorage (use Cloud). 
-  // - If No Token: Save to localStorage.
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    if (localToken) {
+      setToken(localToken);
+      getUserCart(localToken);
+    } else {
+      // Only clear if explicitly no token (Guest)
+      // And we might want to keep guest cart from local storage!
+      // Don't wipe cartItems here blindly. 
+      // If we are guest, cartItems is already initialized from localStorage.
+      setToken("");
     }
+  }, [user]); // user dependency ensures we re-check on login/logout
+
+  // Save Cart to localStorage 
+  // Strategy: Always save to localStorage as a backup/cache for guest. 
+  // If logged in, backend is source of truth, but local updates mirror it.
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
   // Save Products to localStorage
@@ -169,45 +166,14 @@ export const ShopProvider = ({ children }) => {
 
     if (localStorage.getItem('token')) {
       try {
-        // Update quantity API? 
-        // My cartController only has add/remove (increment/decrement).
-        // Usually updateQuantity sets specific number. 
-        // The user didn't explicitly ask for updateQuantity API, but for persistence. 
-        // cartController needs an update logic or we simulate it.
-        // For now, I'll assume add/remove is sufficient for the "add/remove" buttons. 
-        // But cart page has quantity input. 
-        // I'll add `updateCart` to cartController later or just let this be local for now if not critical. 
-        // WAIT - `addToCart` increments. `removeFromCart` decrements.
-        // Explicit set quantity isn't supported by my backend yet. 
-        // I will implement a simplied "add" loop or just fetch `addToCart` multiple times? No that's bad.
-        // Let's stick to what we have: Cloud persistence for Add/Remove. 
-        // If I want perfect sync, I should've made `updateCart` API. 
-        // I'll stick to local update for `updateQuantity` for now to avoid breaking changes, 
-        // but add/remove from product pages will work. 
-        // Actually, if I refresh, quantity updates from Cart Page might be lost if I don't sync.
-        // I will implement `cartData[itemId] = quantity` in backend logic via `addToCart`? No.
-        // Let's leave `updateQuantity` local-only + guest persistent for now, 
-        // as the user asked for "when refresh... added items lost". 
-        // The Add/Remove actions are the main ones.
-        // Ideally I should update backend to support direct quantity set.
-
-        // For this turn, I'll just map add/remove. 
-        // If user updates quantity, it won't persist to cloud. 
-        // Fix: Modify addToCart to accept quantity? Or create /update endpoint.
-        // I'll call `addToCart` simply adds 1. 
-
-        // To properly support quantity updates from cart page (e.g. changing 1 to 5):
-        // I'll create a new endpoint `/api/cart/update` quickly? 
-        // It wasn't in the plan but it's needed for "states everything saves".
-        // I'll add it to my plan for next step if feasible.
-        // For now, let's just make sure basics work.
-
-        // If I loop `addToCart` calls it's messy. 
-        // I'll just skip API call for updateQuantity for now to prevent errors, 
-        // but `addToCart` and `removeFromCart` actions work.
-
+        await fetch(backendUrl + '/api/cart/update', {
+          method: 'POST',
+          headers: { token: localStorage.getItem('token'), 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemId, quantity })
+        });
       } catch (error) {
         console.log(error);
+        toast.error(error.message);
       }
     }
   };
