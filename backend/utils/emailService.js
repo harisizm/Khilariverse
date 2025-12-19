@@ -1,9 +1,11 @@
-import transporter from '../config/emailConfig.js';
-
 const sendOrderConfirmation = async (order, userEmail, userName) => {
     try {
         console.log(`[Email Service] Preparing Order Confirmation for: ${userEmail}`);
         
+        // Ensure ID is a string to prevent .slice() crash
+        const orderId = String(order._id);
+        const orderDate = new Date(order.date).toLocaleDateString();
+
         const mailOptions = {
             from: `"KhilariVerse" <${process.env.EMAIL_USER}>`,
             to: userEmail,
@@ -47,11 +49,11 @@ const sendOrderConfirmation = async (order, userEmail, userName) => {
                         <div class="order-card">
                             <div class="order-row">
                                 <span class="label">Order ID</span>
-                                <span class="value">#${order._id.slice(-6).toUpperCase()}</span>
+                                <span class="value">#${orderId.slice(-6).toUpperCase()}</span>
                             </div>
                             <div class="order-row">
                                 <span class="label">Date</span>
-                                <span class="value">${new Date(order.date).toLocaleDateString()}</span>
+                                <span class="value">${orderDate}</span>
                             </div>
                             <div class="order-row">
                                 <span class="label">Total Amount</span>
@@ -82,7 +84,7 @@ const sendOrderConfirmation = async (order, userEmail, userName) => {
                             </tbody>
                         </table>
 
-                        <a href="${process.env.FRONTEND_URL}/track-order/${order._id}" class="btn">Track Status</a>
+                        <a href="${process.env.FRONTEND_URL}/track-order/${orderId}" class="btn">Track Status</a>
                     </div>
 
                     <div class="footer">
