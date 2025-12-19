@@ -1,3 +1,5 @@
+import transporter from '../config/emailConfig.js';
+
 const sendOrderConfirmation = async (order, userEmail, userName) => {
     try {
         console.log(`[Email Service] Preparing Order Confirmation for: ${userEmail}`);
