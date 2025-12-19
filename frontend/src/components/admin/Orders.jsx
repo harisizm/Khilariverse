@@ -6,13 +6,10 @@ import { Package, Truck, Check, X } from 'lucide-react';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
-  const { token, backendUrl, currency } = useContext(ShopContext);
-  // Wait, standard user uses 'token' in ShopContext. Admin uses 'adminToken' usually if separate.
-  // In `Admin.jsx` we see logic about `user.role === 'admin'`.
-  // The backend `allOrders` endpoint isn't explicitly protected by a special admin middleware yet in my code, just `adminAuth` placeholder.
-  // I will assume for now we can fetch using the standard authenticated user if they are admin, or I will use the locally stored 'token' if the user is logged in as admin.
+  const { backendUrl, currency } = useContext(ShopContext);
 
   const fetchAllOrders = async () => {
+    const token = localStorage.getItem('token');
     console.log("Fetching Orders. Token:", token); // DEBUG LOG
     if (!token) {
       console.log("No token, skipping fetch");
@@ -35,6 +32,7 @@ const Orders = () => {
 
   const statusHandler = async (event, orderId) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.post(backendUrl + '/api/order/status', { orderId, status: event.target.value }, { headers: { token } });
       if (response.data.success) {
         await fetchAllOrders();
@@ -48,7 +46,7 @@ const Orders = () => {
 
   useEffect(() => {
     fetchAllOrders();
-  }, [token]);
+  }, []);
 
   return (
     <div className='p-6 min-h-screen bg-dark-bg text-white'>

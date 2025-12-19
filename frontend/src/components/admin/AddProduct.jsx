@@ -3,7 +3,7 @@ import { Upload } from 'lucide-react';
 import { ShopContext } from '../../context/ShopContext';
 import { toast } from 'react-toastify';
 
-const AddProduct = ({ token }) => {
+const AddProduct = () => {
   const { backendUrl } = useContext(ShopContext);
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
@@ -68,7 +68,7 @@ const AddProduct = ({ token }) => {
       const response = await fetch(backendUrl + "/api/product/add", {
         method: 'POST',
         headers: {
-          token: token
+          token: localStorage.getItem('token')
         },
         body: formData
       });
