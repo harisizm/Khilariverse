@@ -1,5 +1,6 @@
 import userModel from "../models/userModel.js";
 import orderModel from "../models/orderModel.js";
+import { sendWelcomeEmail } from "../utils/emailService.js";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -69,6 +70,9 @@ const registerUser = async (req, res) => {
         })
 
         const user = await newUser.save();
+
+        // Send Welcome Email
+        await sendWelcomeEmail(email, name);
 
         const token = createToken(user._id);
 
