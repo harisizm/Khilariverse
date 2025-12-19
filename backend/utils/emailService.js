@@ -9,33 +9,33 @@ const sendOrderConfirmation = async (order, userEmail, userName) => {
         const orderDate = new Date(order.date).toLocaleDateString();
 
         const mailOptions = {
-            from: `"KhilariVerse" <${process.env.EMAIL_USER}>`,
+            from: `"Khilariverse" <${process.env.EMAIL_USER}>`,
             to: userEmail,
-            subject: `Mission Accepted: Thanks for choosing KhilariVerse`,
+            subject: `Mission Accepted: Order #${orderId.slice(-6).toUpperCase()}`,
             html: `
             <!DOCTYPE html>
             <html>
             <head>
                 <style>
-                    body { margin: 0; padding: 0; background-color: #050505; font-family: 'Courier New', Courier, monospace; color: #ffffff; }
-                    .container { max-width: 600px; margin: 0 auto; background-color: #0a0a0a; border: 1px solid #333; }
-                    .header { background-color: #000; padding: 30px; text-align: center; border-bottom: 2px solid #ec008c; }
+                    body { margin: 0; padding: 0; background-color: #000000; font-family: 'Courier New', Courier, monospace; color: #ffffff; }
+                    .container { max-width: 600px; margin: 20px auto; background-color: #050505; border: 2px solid #ff003c; box-shadow: 0 0 15px rgba(255, 0, 60, 0.3); }
+                    .header { background-color: #000; padding: 30px; text-align: center; border-bottom: 2px solid #ff003c; }
                     .logo { color: #fff; font-size: 28px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; margin: 0; }
-                    .logo span { color: #ec008c; }
+                    .logo span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
                     .content { padding: 40px 30px; }
-                    .greeting { font-size: 24px; margin-bottom: 20px; color: #ec008c; text-transform: uppercase; }
-                    .order-card { background-color: #111; border: 1px solid #333; padding: 25px; margin: 20px 0; border-left: 4px solid #ec008c; }
+                    .greeting { font-size: 24px; margin-bottom: 20px; color: #ff003c; text-transform: uppercase; border-left: 5px solid #ff003c; padding-left: 15px; }
+                    .order-card { background-color: #111; border: 1px solid #333; padding: 25px; margin: 20px 0; }
                     .order-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 10px; }
                     .order-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-                    .label { color: #888; text-transform: uppercase; font-size: 12px; }
+                    .label { color: #aaa; text-transform: uppercase; font-size: 12px; }
                     .value { color: #fff; font-weight: bold; }
                     .items-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                    .items-table th { text-align: left; color: #888; padding: 10px; border-bottom: 1px solid #333; font-size: 12px; text-transform: uppercase; }
+                    .items-table th { text-align: left; color: #ff003c; padding: 10px; border-bottom: 1px solid #333; font-size: 12px; text-transform: uppercase; }
                     .items-table td { padding: 15px 10px; border-bottom: 1px solid #222; color: #fff; }
-                    .btn { display: block; width: 200px; margin: 30px auto; background-color: #ec008c; color: #fff; text-align: center; padding: 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); transition: all 0.3s; }
-                    .btn:hover { background-color: #fff; color: #ec008c; }
-                    .footer { text-align: center; padding: 30px; color: #666; font-size: 12px; border-top: 1px solid #222; }
-                    .highlight { color: #ec008c; }
+                    .btn { display: block; width: 200px; margin: 30px auto; background-color: #ff003c; color: #fff; text-align: center; padding: 15px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #ff003c; transition: all 0.3s; }
+                    .btn:hover { background-color: #000; color: #ff003c; border: 1px solid #ff003c; }
+                    .footer { text-align: center; padding: 30px; color: #666; font-size: 12px; border-top: 1px solid #222; background-color: #000; }
+                    .highlight { color: #ff003c; }
                 </style>
             </head>
             <body>
@@ -46,7 +46,7 @@ const sendOrderConfirmation = async (order, userEmail, userName) => {
                     
                     <div class="content">
                         <h2 class="greeting">MISSION CONFIRMED</h2>
-                        <p>Agent ${userName}, your gear request has been secured. We are preparing your loadout for immediate deployment.</p>
+                        <p style="color: #ddd;">Agent ${userName}, your gear request has been secured. We are preparing your loadout for immediate deployment.</p>
                         
                         <div class="order-card">
                             <div class="order-row">
@@ -118,7 +118,7 @@ const sendWelcomeEmail = async (userEmail, userName) => {
         console.log(`[Email Service] Preparing Welcome Email for: ${userEmail}`);
         
         const mailOptions = {
-            from: `"KhilariVerse" <${process.env.EMAIL_USER}>`,
+            from: `"Khilariverse" <${process.env.EMAIL_USER}>`,
             to: userEmail,
             subject: `Welcome to the Verse | 50% OFF UNLOCKED`,
             html: `
@@ -126,26 +126,27 @@ const sendWelcomeEmail = async (userEmail, userName) => {
             <html>
             <head>
                 <style>
-                    body { margin: 0; padding: 0; background-color: #050505; font-family: 'Courier New', Courier, monospace; color: #ffffff; }
-                    .container { max-width: 600px; margin: 0 auto; background-color: #0a0a0a; border: 1px solid #333; }
-                    .header { background-color: #000; padding: 30px; text-align: center; border-bottom: 2px solid #ec008c; }
+                    body { margin: 0; padding: 0; background-color: #000000; font-family: 'Courier New', Courier, monospace; color: #ffffff; }
+                    .container { max-width: 600px; margin: 20px auto; background-color: #050505; border: 2px solid #ff003c; box-shadow: 0 0 15px rgba(255, 0, 60, 0.3); }
+                    .header { background-color: #000; padding: 30px; text-align: center; border-bottom: 2px solid #ff003c; }
                     .logo { color: #fff; font-size: 28px; font-weight: bold; letter-spacing: 4px; text-transform: uppercase; margin: 0; }
-                    .logo span { color: #ec008c; }
-                    .hero { background-color: #1a1a1a; padding: 40px 20px; text-align: center; background-image: linear-gradient(45deg, #1a1a1a 25%, #222 25%, #222 50%, #1a1a1a 50%, #1a1a1a 75%, #222 75%, #222 100%); background-size: 20px 20px; }
-                    .welcome-text { font-size: 28px; font-weight: bold; color: #fff; text-transform: uppercase; margin: 0; text-shadow: 2px 2px 0px #ec008c; }
+                    .logo span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
+                    .hero { background-color: #1a1a1a; padding: 40px 20px; text-align: center; background-image: radial-gradient(circle, #222 1px, transparent 1px); background-size: 20px 20px; }
+                    .welcome-text { font-size: 28px; font-weight: bold; color: #fff; text-transform: uppercase; margin: 0; text-shadow: 2px 2px 0px #ff003c; }
                     .content { padding: 40px 30px; text-align: center; }
-                    .promo-box { background-color: #ec008c; color: #fff; padding: 20px; margin: 30px 0; transform: skew(-3deg); box-shadow: 0 0 20px rgba(236, 0, 140, 0.4); }
-                    .promo-title { font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; }
-                    .promo-code { display: inline-block; background: #000; color: #ec008c; padding: 5px 15px; margin-top: 10px; font-weight: bold; letter-spacing: 2px; }
-                    .btn { display: inline-block; background-color: transparent; border: 2px solid #ec008c; color: #fff; padding: 15px 40px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; margin-top: 20px; }
-                    .btn:hover { background-color: #ec008c; color: #000; box-shadow: 0 0 20px #ec008c; }
-                    .products-grid { display: table; width: 100%; margin-top: 40px; }
-                    .product-cell { display: table-cell; width: 33%; padding: 10px; vertical-align: top; }
-                    .product-card { background: #111; padding: 15px; border: 1px solid #333; height: 100%; }
+                    .promo-box { background-color: #000; border: 2px solid #ff003c; color: #fff; padding: 20px; margin: 30px 0; box-shadow: 5px 5px 0px #ff003c; }
+                    .promo-title { font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; color: #ff003c; }
+                    .promo-details { margin-top: 10px; font-size: 16px; }
+                    .btn { display: inline-block; background-color: #ff003c; color: #fff; padding: 15px 40px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; margin-top: 20px; border: 1px solid #ff003c; }
+                    .btn:hover { background-color: #000; color: #ff003c; box-shadow: 0 0 15px #ff003c; }
+                    .products-grid { display: table; width: 100%; margin-top: 40px; border-collapse: separate; border-spacing: 10px; }
+                    .product-cell { display: table-cell; width: 33%; vertical-align: top; }
+                    .product-card { background: #111; padding: 15px; border: 1px solid #333; height: 100%; transition: border-color 0.3s; }
+                    .product-card:hover { border-color: #ff003c; }
                     .product-icon { font-size: 24px; margin-bottom: 10px; display: block; }
                     .product-link { color: #888; text-decoration: none; font-size: 12px; text-transform: uppercase; display: block; margin-top: 5px; }
-                    .product-link:hover { color: #ec008c; }
-                    .footer { text-align: center; padding: 30px; color: #666; font-size: 12px; border-top: 1px solid #222; }
+                    .product-link:hover { color: #ff003c; }
+                    .footer { text-align: center; padding: 30px; color: #666; font-size: 12px; border-top: 1px solid #222; background-color: #000; }
                 </style>
             </head>
             <body>
@@ -166,7 +167,7 @@ const sendWelcomeEmail = async (userEmail, userName) => {
                         
                         <div class="promo-box">
                             <h3 class="promo-title">NEW RECRUIT OFFER</h3>
-                            <div>GET 50% OFF YOUR FIRST ORDER</div>
+                            <div class="promo-details">GET 50% OFF YOUR FIRST ORDER</div>
                         </div>
 
                         <a href="${process.env.FRONTEND_URL}/shop" class="btn">INITIATE SHOPPING</a>
