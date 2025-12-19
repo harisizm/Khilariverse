@@ -4,7 +4,7 @@ import { Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 
-const ListProduct = ({ token }) => {
+const ListProduct = () => {
   const { backendUrl, currency } = useContext(ShopContext);
   const [list, setList] = useState([]);
 
@@ -23,45 +23,13 @@ const ListProduct = ({ token }) => {
     }
   }
 
-  const removeProduct = async (id) => {
-    try {
-      const response = await fetch(backendUrl + '/api/product/remove', {
-        method: 'POST',
-        headers: {
-          token: token
-        },
-        body: JSON.stringify({ id })
-      });
-
-      // Need to set content type for JSON body
-      // Wait, fetch defaults to text/plain if not specified.
-      // Let's retry with explicit headers inside the fetch above actually.
-      // Correct fetch call below:
-      /*
-      const response = await fetch(backendUrl + '/api/product/remove', {
-          method: 'POST',
-          headers: {
-              token: token,
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ id })
-      });
-      */
-      // I will write the correct version in the file content.
-
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
-    }
-  }
-
   // Corrected remove function for the file
   const removeProductCorrected = async (id) => {
     try {
       const response = await fetch(backendUrl + '/api/product/remove', {
         method: 'POST',
         headers: {
-          token: token,
+          token: localStorage.getItem('token'),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ id })
