@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import orderModel from "../models/orderModel.js";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -95,11 +96,29 @@ const adminLogin = async (req, res) => {
     }
 }
 
-// Admin: Get all users
+// Admin: Get all users with enhanced stats
 const allUsers = async (req, res) => {
     try {
         const users = await userModel.find({});
-        res.json({ success: true, users });
+        const orders = await orderModel.find({}); // Fetch all orders to map stats
+
+        const usersWithStats = users.map(user => {
+            // Filter orders for this user
+            const userOrders = orders.filter(order => order.userId === user._id.toString());
+            
+            // Count Active Orders (Not Delivered, Not Cancelled)
+            const activeOrders = userOrders.filter(order => 
+                order.status !== 'Delivered' && order.status !== 'Cancelled'
+            ).length;
+
+            return {
+                ...user.toObject(),
+                activeOrders,
+                accountCreated: user.createdAt // Ensure model has timestamp
+            };
+        });
+
+        res.json({ success: true, users: usersWithStats });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });

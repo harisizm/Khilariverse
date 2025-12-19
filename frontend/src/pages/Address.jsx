@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ShopContext } from '../context/ShopContext';
 import { AuthContext } from '../context/AuthContext';
-import { CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import { CheckCircle, Loader2, ArrowRight, Truck } from 'lucide-react';
 
 const Address = () => {
   const navigate = useNavigate();
@@ -116,12 +116,23 @@ const Address = () => {
           <h2 className="text-4xl font-display font-bold text-white mb-4">ORDER <span className="text-neon-pink">CONFIRMED</span></h2>
           <p className="text-gray-400 mb-8 text-lg">Thank you for your purchase! Your gear is being prepared for deployment.</p>
 
-          <button
-            onClick={() => navigate('/shop')}
-            className="w-full bg-neon-pink text-white font-bold py-4 rounded-lg hover:bg-white hover:text-neon-pink transition-all duration-300 shadow-lg hover:shadow-glow-pink flex items-center justify-center gap-2"
-          >
-            CONTINUE SHOPPING <ArrowRight size={20} />
-          </button>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => navigate('/shop')}
+              className="w-full bg-neon-pink text-white font-bold py-4 rounded-lg hover:bg-white hover:text-neon-pink transition-all duration-300 shadow-lg hover:shadow-glow-pink flex items-center justify-center gap-2"
+            >
+              CONTINUE SHOPPING <ArrowRight size={20} />
+            </button>
+
+            <button
+              onClick={() => navigate('/orders')} // Redirect to orders list or specific track page? User might want to track this specific order.
+              // ideally navigate(`/track-order/${lastOrderId}`) but I don't have ID here easily without response modification.
+              // For simplicity, Go to My Orders where they can click track.
+              className="w-full bg-transparent border border-white/20 text-white font-bold py-4 rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              TRACK YOUR ORDER <Truck size={20} />
+            </button>
+          </div>
           <p className="mt-4 text-xs text-gray-500 uppercase tracking-widest">Order ID: #{Math.floor(100000 + Math.random() * 900000)}</p>
         </div>
       </div>

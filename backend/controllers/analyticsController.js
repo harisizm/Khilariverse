@@ -16,17 +16,30 @@ const getDashboardStats = async (req, res) => {
         const totalProducts = products.length;
         const totalOrders = orders.length;
 
-        // Calculate Total Sales
+        // Calculate Total Sales (Only Delivered)
         const totalSales = orders.reduce((acc, order) => {
-            return order.payment ? acc + order.amount : acc;
+            return (order.payment || order.status === 'Delivered') ? acc + order.amount : acc; 
+            // Wait, request said "whenever status marked as delivered, add...". 
+            // Usually 'payment' is true for online, but COD depends on delivery.
+            // Let's stick strict: Only if Status is 'Delivered'.
+            // Actually, if paid online, it's sales? 
+            // User request: "whenever status marked delivered add data into sales graph". 
+            // So Strict 'Delivered'.
+        }, 0);
+        
+        // Strict Delivered calculation for Total Sales
+        const deliveredSales = orders.reduce((acc, order) => {
+             // Check if Delivered
+             if (order.status === 'Delivered') {
+                 return acc + order.amount;
+             }
+             return acc;
         }, 0);
 
-        // Prep data for Graph (Last 5 orders or grouped by day? Let's do simple order list for now or dummy graph data if too complex)
-        // Better: Group orders by date for the graph 'Sales vs Date'
-        // Let's create a map of last 7 days sales
+        // Prep data for Graph (Sales vs Date) - Only Delivered
         const salesDataMap = {};
         orders.forEach(order => {
-            if (order.payment) {
+            if (order.status === 'Delivered') {
                 const date = new Date(order.date).toLocaleDateString();
                 salesDataMap[date] = (salesDataMap[date] || 0) + order.amount;
             }
@@ -45,7 +58,7 @@ const getDashboardStats = async (req, res) => {
                 totalUsers,
                 totalProducts,
                 totalOrders,
-                totalSales,
+                totalSales: deliveredSales,
             },
             graphData,
             recentOrders: orders.slice(-5).reverse() // Last 5 orders

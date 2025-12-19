@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     cartData: { type: Object, default: {} },
     role: { type: String, default: 'user' }, // 'admin' or 'user'
     lastLogin: { type: Date, default: Date.now }
-}, { minimize: false });
+}, { minimize: false, timestamps: true });
 
 const userModel = mongoose.models.user || mongoose.model("user", userSchema);
 

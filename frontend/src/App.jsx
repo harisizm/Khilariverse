@@ -12,6 +12,7 @@ import Admin from './pages/Admin';
 import AdminLogin from './components/admin/AdminLogin';
 import Orders from './components/admin/Orders';
 import MyOrders from './pages/MyOrders';
+import OrderTracking from './pages/OrderTracking';
 import AddProduct from './components/admin/AddProduct';
 import ListProduct from './components/admin/ListProduct';
 import Dashboard from './components/admin/Dashboard';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/place-order" element={<Address />} />
           <Route path="/orders" element={<MyOrders />} />
+          <Route path="/track-order/:orderId" element={<OrderTracking />} />
           <Route path="/admin/login" element={<AdminLogin />} /> {/* Admin login remains a separate route */}
           <Route path="/admin" element={<Admin />}>
             <Route index element={<Dashboard />} /> {/* Default to Dashboard */}
