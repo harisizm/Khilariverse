@@ -7,7 +7,7 @@ export const ShopContext = createContext();
 
 export const ShopProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
-  const backendUrl = "http://localhost:5000";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
   const [cartItems, setCartItems] = useState(() => {
     // Lazy initialization for guest cart persistence

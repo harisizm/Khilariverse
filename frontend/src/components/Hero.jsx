@@ -7,13 +7,15 @@ const Hero = () => {
   return (
     <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden">
       {/* Video Background */}
-      <div className="absolute top-0 left-0 w-full h-full -z-20">
+      <div className="absolute top-0 left-0 w-full h-full -z-20 bg-black">
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover"
+          preload="auto"
+          className="w-full h-full object-cover opacity-0 transition-opacity duration-1000"
+          onLoadedData={(e) => e.target.classList.remove('opacity-0')}
         >
           <source src={heroVideo} type="video/mp4" />
           Your browser does not support the video tag.
