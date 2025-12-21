@@ -87,7 +87,9 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/5 py-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} KHILARIVERSE. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} KHILARIVERSE. All rights reserved. <span className="mx-1">|</span> Developed by <a href="https://harisifti.vercel.app" target="_blank" rel="noopener noreferrer" className="text-neon-pink hover:text-white transition-colors font-medium">harisizm</a>
+          </p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link to="/privacy" className="hover:text-neon-pink transition-colors">Privacy Policy</Link>
             <Link to="/terms" className="hover:text-neon-pink transition-colors">Terms of Service</Link>
