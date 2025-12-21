@@ -2,7 +2,7 @@
 
 **An E-commerce Store in MERN for Software Design and Architecture Semester Project.**
 
-![Khilariverse Banner](https://via.placeholder.com/1000x300/000000/ff003c?text=KHILARIVERSE)
+![Khilariverse Banner](frontend/src/assets/Screenshot%20(47).png)
 
 ## 🚀 Project Overview
 
